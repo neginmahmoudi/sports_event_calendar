@@ -24,14 +24,14 @@ export default function SingleEvent(props: Props) {
     );
   }
   return (
-    <>
+    <div className="h-100 d-flex flex-column align-items-center justify-content-center">
       <h1>more details !</h1>
       <div>sport id:{props.foundEvent.sportId}</div>
       <div>evetns id:{props.foundEvent.eventsId}</div>
       <h3>
         <Link href="/">Back</Link>
       </h3>
-    </>
+    </div>
   );
 }
 

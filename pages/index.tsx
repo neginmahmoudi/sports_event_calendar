@@ -58,7 +58,6 @@ export default function SportCalendarEvents(props: Props) {
           </thead>
           <tbody>
             {allEvents?.map((teamsEvent) => {
-              console.log('show meeee', teamsEvent);
               return (
                 <tr key={`events-${teamsEvent.id}`}>
                   <td> {teamsEvent.dateVenue.split('T')[0]}</td>
@@ -66,7 +65,13 @@ export default function SportCalendarEvents(props: Props) {
                   <td>{teamsEvent.name}</td>
                   <td>{teamsEvent.originCompetitionName}</td>
                   <td>
-                    <button>delete</button>
+                    <button
+                      onClick={async () => {
+                        confirm('Want to delete?');
+                      }}
+                    >
+                      delete
+                    </button>
                     <a href={`/${teamsEvent.id}`}>view</a>
                   </td>
                 </tr>
@@ -83,7 +88,6 @@ export async function getServerSideProps(): Promise<
   GetServerSidePropsResult<Props>
 > {
   const events = await getTeamsEventWithJoinTables();
-  console.log('events', events);
   const teams = await getTeams();
 
   //Pass the events data as props to the page
