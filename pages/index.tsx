@@ -34,7 +34,9 @@ export default function SportCalendarEvents(props: Props) {
           }
         }}
       >
-        <option value={''}>All Teams</option>
+        <option value={''} placeholder={'all teams'}>
+          All Teams
+        </option>
         {props.teams?.map((team) => {
           return (
             <option value={team.name} key={`teams-${team.id}`}>
