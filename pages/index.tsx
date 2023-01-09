@@ -26,7 +26,6 @@ export default function SportCalendarEvents(props: Props) {
           }
 
           if (e.currentTarget.value !== '') {
-            console.log(e.currentTarget.value);
             const filteredEventOnTeams = props.events.filter((event) => {
               return event.name.includes(e.currentTarget.value);
             });
@@ -34,9 +33,7 @@ export default function SportCalendarEvents(props: Props) {
           }
         }}
       >
-        <option value={''} placeholder={'all teams'}>
-          All Teams
-        </option>
+        <option value={''}>All Teams</option>
         {props.teams?.map((team) => {
           return (
             <option value={team.name} key={`teams-${team.id}`}>
