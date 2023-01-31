@@ -38,7 +38,7 @@ export async function getEvents() {
 
 export async function getEventsWithJoinTables() {
   const events = await sql<EventDTO[]>`
- SELECT events.id, events.time_venue_utc, events.date_venue, events.stage_id, stages.stage_name, events.event_status_id, events_status.name
+  SELECT events.id, events.time_venue_utc, events.date_venue, events.stage_id, stages.stage_name, events.event_status_id, events_status.name
   FROM events INNER JOIN
   teams_events ON events.id = teams_events.events_id INNER JOIN
   teams ON teams_events.team_id = teams.id INNER JOIN
@@ -46,6 +46,7 @@ export async function getEventsWithJoinTables() {
   stadiums ON events.stadium_id = stadiums.id INNER JOIN
   origin_competition ON events.origin_competition_id = origin_competition.id INNER JOIN
   stages ON events.stage_id = stages.id
+
 `;
   return events;
 }

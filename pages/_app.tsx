@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
     refreshUserProfile().catch(() => console.log('fetch api failed'));
   }, [refreshUserProfile]);
   useEffect(() => {
-    require('bootstrap/dist/js/bootstrap.bundle.min.js');
+    require('bootstrap/dist/js/bootstrap.min.js');
   }, []);
   return (
     <>

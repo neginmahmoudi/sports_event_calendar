@@ -36,7 +36,8 @@ CREATE TABLE teams_events (
 id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
 team_id  integer REFERENCES teams (id),
 team_type varchar(50) NOT NULL,
-events_id integer REFERENCES events (id)
+events_id integer REFERENCES events (id),
+user_id integer REFERENCES users (id)
 );
 
 
@@ -92,3 +93,26 @@ CREATE TABLE sports (
    id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     sport_name VARCHAR(200) NOT NULL
 );
+
+-- Create the user role table
+CREATE TABLE roles (
+   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+   name VARCHAR(100) NOT NULL
+);
+
+-- Create the users table
+CREATE TABLE users(
+    id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    username varchar(70) NOT NULL UNIQUE,
+    password_hash varchar(70) NOT NULL UNIQUE,
+    role_id integer REFERENCES roles (id) ON DELETE CASCADE
+);
+
+-- Create the session table
+ CREATE TABLE sessions (
+      id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+      token varchar(110) NOT NULL UNIQUE,
+      expiry_timestamp timestamp NOT NULL DEFAULT NOW() + INTERVAL '24 hours',
+      user_id integer REFERENCES users (id) ON DELETE CASCADE
+
+    );

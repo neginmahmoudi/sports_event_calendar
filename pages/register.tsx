@@ -54,7 +54,7 @@ export default function Register(props: Props) {
     <div>
       <div>
         <Head>
-          <title>Sign Up | Qvent</title>
+          <title>Sign Up </title>
           <meta name="description" content="login page of the app" />
         </Head>
 

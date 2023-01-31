@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-// import { getValidSessionByToken } from '../database/sessions';
+import { getValidSessionByToken } from '../database/sessions';
 import { LoginResponseBody } from './api/login';
 
 type Props = {
@@ -35,6 +35,9 @@ export default function Login(props: Props) {
       setErrors(loginResponseBody.errors);
       return console.log(loginResponseBody.errors);
     }
+
+    console.log(router.query.returnTo);
+
     const returnTo = router.query.returnTo;
 
     if (
@@ -56,81 +59,46 @@ export default function Login(props: Props) {
 
   return (
     <div>
-      <Head>
-        <title>Login |</title>
-        <meta name="description" content="login page of the app" />
-      </Head>
       <div>
-        <div id="login">
-          <h3 className="text-center text-white pt-5">Login form</h3>
+        <Head>
+          <title>Login </title>
+          <meta name="description" content="login page of the app" />
+        </Head>
 
-          <div className="container">
-            {errors.map((error) => {
-              return <p key={error.message}>ERROR: {error.message}</p>;
-            })}
-            <div
-              id="login-row"
-              className="row justify-content-center align-items-center"
+        <div>
+          <h3>Login Your Account </h3>
+          <br />
+          {errors.map((error) => {
+            return <p key={error.message}>ERROR: {error.message}</p>;
+          })}
+          <input
+            required
+            value={username}
+            onChange={(event) => {
+              setUsername(event.currentTarget.value.toLowerCase());
+            }}
+            placeholder="Username"
+          />
+          <input
+            required
+            type="password"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.currentTarget.value);
+            }}
+            placeholder="Password"
+          />
+          <br />
+          <div>
+            <button
+              onClick={async () => {
+                await loginHandler();
+              }}
             >
-              <div id="login-column" className="col-md-6">
-                <div id="login-box" className="col-md-12">
-                  <form
-                    id="login-form"
-                    className="form"
-                    action=""
-                    method="post"
-                  >
-                    <h3 className="text-center text-info">Login</h3>
-                    <div className="form-group">
-                      <label className="text-info">Username:</label>
-                      <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        className="form-control"
-                        value={username}
-                        onChange={(event) => {
-                          setUsername(event.currentTarget.value.toLowerCase());
-                        }}
-                      />
-                    </div>
-                    <div className="form-group">
-                      <label className="text-info">Password:</label>
-                      <br />
-                      <input
-                        name="password"
-                        id="password"
-                        className="form-control"
-                        type="password"
-                        value={password}
-                        onChange={(event) => {
-                          setPassword(event.currentTarget.value);
-                        }}
-                      />
-                    </div>
-                    <br />
-                    <div>
-                      <button
-                        className="btn btn-success btn-md"
-                        onClick={async () => {
-                          await loginHandler();
-                        }}
-                      >
-                        submit
-                      </button>
-                      <div id="register-link" className="text-right">
-                        <Link
-                          href="/register"
-                          className="text-info text-decoration-none"
-                        >
-                          Register here
-                        </Link>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
+              Login
+            </button>
+            <p> do not have any account ?</p>
+            <Link href="/register">Create Account</Link>
           </div>
         </div>
       </div>
@@ -141,14 +109,14 @@ export default function Login(props: Props) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = context.req.cookies.sessionToken;
 
-  // if (token && (await getValidSessionByToken(token))) {
-  //   return {
-  //     redirect: {
-  //       destination: '/',
-  //       permanent: true,
-  //     },
-  //   };
-  // }
+  if (token && (await getValidSessionByToken(token))) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: true,
+      },
+    };
+  }
 
   return {
     props: {},

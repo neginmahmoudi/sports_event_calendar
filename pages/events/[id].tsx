@@ -1,12 +1,12 @@
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { getTeamsEventById, TeamsEvents } from '../database/teamsevents';
-import { parseIntFromContextQuery } from '../utils/contextQuery';
+import { getTeamsEventById, TeamsEventsDTO } from '../../database/teamsevents';
+import { parseIntFromContextQuery } from '../../utils/contextQuery';
 
 type Props =
   | {
-      foundEvent: TeamsEvents;
+      foundEvent: TeamsEventsDTO;
     }
   | {
       error: string;
@@ -26,20 +26,22 @@ export default function SingleEvent(props: Props) {
   return (
     <div className="h-100 d-flex flex-column align-items-center justify-content-center">
       <h1>more details !</h1>
-      <div>sport id:{props.foundEvent.sportId}</div>
-      <div>evetns id:{props.foundEvent.eventsId}</div>
+      {/* <div>date:{props.foundEvent.dateVenue}</div> */}
+      <div>name:{props.foundEvent?.name}</div>
+      <div>time:{props.foundEvent?.timeVenueUtc}</div>
+      <div>sport:{props.foundEvent?.sportName}</div>
+      <div>Origin:{props.foundEvent?.originCompetitionName}</div>
+
       <h3>
-        <Link href="/">Back</Link>
+        <Link href="/events">Back</Link>
       </h3>
     </div>
   );
 }
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext,
-): Promise<GetServerSidePropsResult<Props>> {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const teamsEventId = parseIntFromContextQuery(context.query.id);
-  console.log(teamsEventId);
+
   if (typeof teamsEventId === 'undefined') {
     context.res.statusCode = 404;
     return {
@@ -52,11 +54,13 @@ export async function getServerSideProps(
   if (typeof foundEvent === 'undefined') {
     return {
       props: {
-        error: 'no Items found',
+        error: 'no event found',
       },
     };
   }
   return {
-    props: { foundEvent },
+    props: { foundEvent: JSON.parse(JSON.stringify(foundEvent)) },
   };
 }
+
+/// this page needs to be checked !

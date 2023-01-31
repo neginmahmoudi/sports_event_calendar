@@ -9,7 +9,7 @@ type Session = {
 export async function createSession(userId: User['id'], token: string) {
   const [session] = await sql<Session[]>`
     INSERT INTO sessions
-      (token, user_id, csrf_secret)
+      (token, user_id)
     VALUES
       (${token}, ${userId})
     RETURNING
@@ -36,7 +36,6 @@ export async function getValidSessionByToken(token: Session['token']) {
     AND
       sessions.expiry_timestamp > now()
   `;
-
   return session;
 }
 

@@ -3,11 +3,11 @@ import moment from 'moment';
 import { GetServerSidePropsResult } from 'next';
 import React, { useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
-import { getSports, Sport } from '../database/sports';
+import { getSports, Sport } from '../../database/sports';
 import {
   getTeamsEventWithJoinTables,
   TeamsEventsDTO,
-} from '../database/teamsevents';
+} from '../../database/teamsevents';
 
 type Props = {
   events: TeamsEventsDTO[];

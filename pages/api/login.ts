@@ -3,9 +3,7 @@ import bcrypt from 'bcrypt';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createSession } from '../../database/sessions';
 import { getUserWithPasswordHashByUsername } from '../../database/users';
-import { createSerializedRegisterSessionTokenCookie } from '../../utils/cookies';
-
-// import { createSerializedRegisterSessionTokenCookie } from '../../utils/cookie';
+import { createSerializedRegisterSessionTokenCookie } from '../../utils/cookie';
 
 export type LoginResponseBody =
   | { errors: { message: string }[] }
@@ -58,7 +56,7 @@ export default async function handler(
     const serializedCookie = createSerializedRegisterSessionTokenCookie(
       session.token,
     );
-
+    console.log(serializedCookie, 'this is the cookie');
     response
       .status(200)
       .setHeader('Set-Cookie', serializedCookie)

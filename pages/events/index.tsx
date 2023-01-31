@@ -1,10 +1,10 @@
 import { GetServerSidePropsResult } from 'next';
 import { useState } from 'react';
-import { getTeams, Teams } from '../database/teams';
+import { getTeams, Teams } from '../../database/teams';
 import {
   getTeamsEventWithJoinTables,
   TeamsEventsDTO,
-} from '../database/teamsevents';
+} from '../../database/teamsevents';
 
 type Props = {
   events: TeamsEventsDTO[];
@@ -64,14 +64,7 @@ export default function SportCalendarEvents(props: Props) {
                   <td>{teamsEvent.name}</td>
                   <td>{teamsEvent.originCompetitionName}</td>
                   <td>
-                    <button
-                      onClick={async () => {
-                        confirm('Want to delete?');
-                      }}
-                    >
-                      delete
-                    </button>
-                    <a href={`/${teamsEvent.id}`}>view</a>
+                    <a href={`/events/${teamsEvent.id}`}>view</a>
                   </td>
                 </tr>
               );

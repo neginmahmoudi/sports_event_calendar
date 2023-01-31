@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createSession } from '../../database/sessions';
 import { createUser, getUserByUsername } from '../../database/users';
-import { createSerializedRegisterSessionTokenCookie } from '../../utils/cookies';
+import { createSerializedRegisterSessionTokenCookie } from '../../utils/cookie';
 
 export type RegisterResponseBody =
   | { errors: { message: string }[] }

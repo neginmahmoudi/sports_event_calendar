@@ -1,11 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
-import {
-  getUserBySessionToken,
-  getUserRoleBySessionToken,
-  User,
-} from '../database/users';
+import { getUserRoleBySessionToken, User } from '../database/users';
 
 type Props = {
   user?: User;
@@ -28,18 +23,11 @@ export default function UserProfile(props: Props) {
   return (
     <>
       <Head>
-        <title>Your Profile</title>
+        <title>Admin Profile</title>
         <meta name="description" content="Biography of the person" />
       </Head>
       <div>
         <h1>welcome to your account, {props.user.username}!</h1>
-        {props.user && props.user.roleId === 1 ? (
-          <button>
-            <Link href="/pannel"> admin pannel</Link>
-          </button>
-        ) : (
-          <>hello</>
-        )}
       </div>
     </>
   );
@@ -47,26 +35,18 @@ export default function UserProfile(props: Props) {
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = context.req.cookies.sessionToken;
 
-  const user = token && (await getUserBySessionToken(token));
+  const adminRole = token && (await getUserRoleBySessionToken(token));
 
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login?returnTo=/private-profile',
-        permanent: false,
-      },
-    };
-  }
-
-  if (!(user.role_id === 1)) {
+  if (!adminRole) {
+    context.res.statusCode = 400;
     return {
       props: {
-        error: 'you are not admin',
+        error: 'you are not authorized to be here',
       },
     };
   }
 
   return {
-    props: { user },
+    props: { user: adminRole },
   };
 }
