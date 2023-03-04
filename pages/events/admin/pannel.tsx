@@ -1,6 +1,6 @@
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import { getUserRoleBySessionToken, User } from '../database/users';
+import { getUserRoleBySessionToken, User } from '../../../database/users';
 
 type Props = {
   user?: User;

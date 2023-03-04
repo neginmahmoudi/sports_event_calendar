@@ -35,7 +35,7 @@ export default function UserProfile(props: Props) {
         <h1>welcome to your account, {props.user.username}!</h1>
         {props.user && props.user.roleId === 1 ? (
           <button>
-            <Link href="/pannel"> admin pannel</Link>
+            <Link href="events/admin/pannel"> admin pannel</Link>
           </button>
         ) : (
           <>hello</>
@@ -48,20 +48,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const token = context.req.cookies.sessionToken;
 
   const user = token && (await getUserBySessionToken(token));
-
+  // console.log('userrrr', user);
   if (!user) {
     return {
       redirect: {
         destination: '/login?returnTo=/private-profile',
         permanent: false,
-      },
-    };
-  }
-
-  if (!(user.role_id === 1)) {
-    return {
-      props: {
-        error: 'you are not admin',
       },
     };
   }

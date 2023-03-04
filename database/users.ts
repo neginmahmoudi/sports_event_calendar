@@ -58,7 +58,7 @@ export async function getUserWithPasswordHashByUsername(username: string) {
 export async function getUserBySessionToken(token: string) {
   if (!token) return undefined;
 
-  const [user] = await sql<{ id: number; username: string; role_id: number }[]>`
+  const [user] = await sql<{ id: number; username: string; roleId: number }[]>`
   SELECT
     users.id,
     users.username,

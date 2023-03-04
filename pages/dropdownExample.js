@@ -2,13 +2,9 @@ import { useEffect, useState } from 'react';
 
 export default function SingleEvent() {
   const [input, setInput] = useState('');
-  const [allGenres, setAllGenres] = useState([
-    { name: 'comedy' },
-    { name: 'horror' },
-    { name: 'romance' },
-  ]);
+  const [allGenres, setAllGenres] = useState([]);
 
-  const baseUrl = 'http://localhost:3000/dropdownExample';
+  const baseUrl = 'http://localhost:3000/api/genre';
 
   const handleClick = () => {
     setInput('');
@@ -20,7 +16,7 @@ export default function SingleEvent() {
   //   setAllGenres(allGenresdata);
   // }
 
-  async function getNewGenre() {
+  async function createNewGenre() {
     const response = await fetch(baseUrl, {
       method: 'POST',
       headers: {
@@ -29,13 +25,11 @@ export default function SingleEvent() {
       body: JSON.stringify({ name: input }),
     });
     const createdGenre = await response.json();
-
     setAllGenres([...allGenres, createdGenre]);
-    console.log('this is allllll', allGenres);
   }
 
   async function deleteGenre(id) {
-    const response = await fetch(`baseUrl/${id}`, {
+    const response = await fetch(`${baseUrl}/${id}`, {
       method: 'DELETE',
     });
     const deletedGenre = await response.json();
@@ -53,7 +47,7 @@ export default function SingleEvent() {
       />
       <button
         onClick={async () => {
-          await getNewGenre();
+          await createNewGenre();
           handleClick();
         }}
       >
@@ -65,6 +59,7 @@ export default function SingleEvent() {
       <br />
 
       {allGenres?.map((genre) => {
+        console.log('this is meee', allGenres);
         return (
           <>
             <div key={`genres-${genre.id}`}>{genre.name}</div>

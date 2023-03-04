@@ -50,6 +50,58 @@ export async function getEventsWithJoinTables() {
 `;
   return events;
 }
+export async function getAllEventsByAdminAndValidSessionToken(
+  token: string | undefined,
+) {
+  if (!token) return undefined;
+  const [event] = await sql<Event[]>`
+    SELECT
+    events.*
+    FROM
+      teams_events,
+      events,
+      sessions,
+      users,
+      roles
+    WHERE
+    sessions.user_id= users.id
+    AND
+    users.role_id=roles.id
+    AND
+    roles.name='Admin'
+    AND
+      sessions.token = ${token}
+    AND
+      sessions.expiry_timestamp > now()
+  `;
+  return event;
+}
+export async function createEvent(
+  image: string,
+  eventName: string,
+  description: string,
+  address: string,
+  eventDate: Date,
+  categoryId: number,
+  userId: number,
+  free: boolean,
+) {
+  const [event] = await sql<Event[]>`
+    INSERT INTO events
+      ( image,
+       event_name,
+       description,
+       address,
+       event_date,
+       category_id,
+       user_id,
+       free)
+    VALUES
+      (${image},${eventName}, ${description}, ${address},${eventDate},${categoryId},${userId},${free})
+    RETURNING *
+  `;
+  return event;
+}
 
 export async function deleteEventById(id: number) {
   const [event] = await sql<Event[]>`

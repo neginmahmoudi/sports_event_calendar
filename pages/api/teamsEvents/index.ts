@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getAllEventsByAdminAndValidSessionToken } from '../../../database/events';
 import { getValidSessionByToken } from '../../../database/sessions';
-import { getAllTeamsEventsByAdminAndValidSessionToken } from '../../../database/teamsevents';
+import {
+  getAllTeamsEventsByAdminAndValidSessionToken,
+  getTeamsEventWithJoinTables,
+} from '../../../database/teamsevents';
 import { getUserRoleBySessionToken } from '../../../database/users';
 
 export default async function handler(
@@ -31,7 +33,7 @@ export default async function handler(
   if (request.method === 'GET') {
     const events =
       request.cookies.sessionToken &&
-      (await getAllEventsByAdminAndValidSessionToken(
+      (await getAllTeamsEventsByAdminAndValidSessionToken(
         request.cookies.sessionToken,
       ));
     return response.status(200).json(events);
@@ -73,6 +75,7 @@ export default async function handler(
       userId,
       free,
     );
+    console.log(newEvent);
     return response.status(200).json(newEvent);
   }
 

@@ -1,6 +1,7 @@
+// fake page take everything to the pannel.tsx
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { getUserBySessionToken } from '../../../database/users';
 
 type Props = {

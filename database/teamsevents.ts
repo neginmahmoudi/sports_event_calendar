@@ -18,6 +18,12 @@ export type TeamsEventsDTO = {
   teamId: number;
   name: string;
 };
+export type EventDTO = {
+  dateVenue: string;
+  timeVenueUtc: string;
+  originCompetitionName: string;
+  name: string;
+};
 
 export async function getTeamsEventWithJoinTables() {
   const TeamsEvents = await sql<TeamsEventsDTO[]>`
@@ -31,8 +37,28 @@ group by teams_events.events_id,events.time_venue_utc, events.date_venue, events
 `;
   return TeamsEvents;
 }
+export async function createEvent(
+  dateVenue: string,
+  timeVenueUtc: string,
+  name: string,
+  originCompetitionName: string,
+) {
+  const [event] = await sql<EventDTO[]>`
+    INSERT INTO events,
+    origin_competition,
+    teams
+      ( date_venue,
+       time_venue_utc,
+       name,
+       origin_competition_name)
+    VALUES
+      (${dateVenue},${timeVenueUtc}, ${name},${originCompetitionName})
+    RETURNING *
+  `;
+  return event;
+}
+
 export async function getTeamsEventsByAdminAndValidSessionToken(
-  id: number,
   token: string | undefined,
 ) {
   if (!token) return undefined;
@@ -60,6 +86,37 @@ export async function getTeamsEventsByAdminAndValidSessionToken(
   return teamsEvent;
 }
 
+export async function getAllTeamsEventsByAdminAndValidSessionToken(
+  token: string | undefined,
+) {
+  if (!token) return undefined;
+  const [teamsEvent] = await sql<TeamsEventsDTO[]>`
+    SELECT
+    teams_events.*,
+    events.*,
+    teams.*,
+    origin_competition.*
+    FROM
+      teams_events,
+      events,
+      sessions,
+      users,
+      roles,
+      teams,
+      origin_competition
+    WHERE
+    sessions.user_id= users.id
+    AND
+    users.role_id=roles.id
+    AND
+    roles.name='Admin'
+    AND
+      sessions.token = ${token}
+    AND
+      sessions.expiry_timestamp > now()
+  `;
+  return teamsEvent;
+}
 // SELECT
 // teams_events.*,
 // events.*
